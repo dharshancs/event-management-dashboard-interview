@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}User Dashboard{% endblock %}
+{% block rightside %}
+                {%if session.get('id') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('base.logout') }}">Logout</a>
+                </li>
+                {%endif%}
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    {% if notifications %}
+        <div class="alert alert-warning" role="alert">
+            <h4 class="alert-heading">📅 Upcoming Event Alerts</h4>
+            <hr>
+            <ul class="mb-0">
+                {% for note in notifications %}
+                    <li>{{ note }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <h2>Available Events</h2>
+    <hr>
+
+    <div class="row">
+        {% for event in events %}
+        <div class="col-md-4 mb-3">
+            <div class="card" style="border: 1px solid #999;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ event['title'] }}</h5>
+                    <p class="card-text">{{ event['description'] }}</p>
+                    <p><strong>Date:</strong> {{ event['date'] }}</p>
+                    <p><strong>Total Attendees:</strong>
+                        <span id="count-{{ event['id'] }}">{{ event['registrations_count'] }}</span>
+                    </p>
+
+                    {% if event['id'] in my_regs %}
+                        <button class="btn btn-secondary" disabled>Already Registered</button>
+                    {% else %}
+                        <a href="{{ url_for('user.book_event', event_id=event['id']) }}" class="btn btn-success">Register Now</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+            <p>No events available yet.</p>
+        {% endfor %}
+    </div>
+</div>
+<script>
+function updateCounts() {
+    fetch('/user/api/stats')
+        .then(response => response.json())
+        .then(data => {
+            for (const [eventId, count] of Object.entries(data)) {
+                const element = document.getElementById(`count-${eventId}`);
+                if (element) {
+                    element.innerText = count;
+                }
+            }
+        });
+}
+setInterval(updateCounts, 5000);
+</script>
+
+{% endblock %}

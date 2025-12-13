@@ -1,5 +1,6 @@
 from flask import Blueprint,render_template,request,session,redirect,url_for,flash
 from .__init__ import connect_database
+from werkzeug.security import generate_password_hash, check_password_hash
 
 b_view = Blueprint('base',__name__)
 
@@ -14,7 +15,7 @@ def home():
         cur.execute('SELECT * FROM USERS WHERE email=?',(email,))
         user=cur.fetchone()
         conn.close()
-        if user and password==user['password']:
+        if user and check_password_hash(user['password'], password):
             if user['role']!="organiser":
                 session['id'] = user['id']
                 session['email'] = user['email']
@@ -60,8 +61,9 @@ def register():
             flash("Email already registered!. Login or use a different email", "danger")
             conn.close()
             return redirect(url_for('base.home'))
-        
-        cur.execute('INSERT INTO USERS (name,email,password,role) VALUES (?,?,?,?)',(name,email,password,role))
+        hashed_password = generate_password_hash(password)
+
+        cur.execute('INSERT INTO USERS (name,email,password,role) VALUES (?,?,?,?)',(name,email,hashed_password,role))
         conn.commit()
         conn.close()
         flash("Account Registered Succesfully","success")
@@ -76,3 +78,10 @@ keys to be added in frotend
     role
     
 '''
+
+
+@b_view.route('/logout')
+def logout():
+    session.clear()
+    flash("Logged out successfully","success")
+    return redirect(url_for('base.home'))

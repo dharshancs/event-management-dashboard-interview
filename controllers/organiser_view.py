@@ -1,10 +1,21 @@
 from flask import Blueprint,render_template,request,session,redirect,url_for,flash
+from functools import wraps
 from .__init__ import connect_database
 
 o_view = Blueprint('organiser',__name__)
 
 
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'id' not in session or session.get('role') != 'organiser':
+            flash("You need Admin Access to access the page","danger")
+            return redirect(url_for('base.home'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 @o_view.route('/dashboard', methods=['GET'])
+@admin_required
 def organiser_dashboard():
     conn = connect_database()
     cur = conn.cursor()
@@ -23,6 +34,7 @@ def organiser_dashboard():
     return render_template("organisers_dashboard.html",events=events_created_by_organiser)
 
 @o_view.route('/create_event', methods=['POST'])
+@admin_required
 def create_event():
     if request.method == "POST":
         title = request.form['title']
