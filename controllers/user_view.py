@@ -12,11 +12,11 @@ def user_dashboard():
     all_events = cur.fetchall()
 
     cur.execute('''
-                SELECT event_id FROM REGISTRATIONS WHERE user_id=? VALUES (?)
-            ''',(session['id']))
-    events_user_registered = cur.fetchall()
+                SELECT event_id FROM REGISTRATIONS WHERE user_id=?
+            ''',(session['id'],))
+    events_user_registered = [row['event_id'] for row in cur.fetchall()]
     conn.close()
-    return "user dashboard with all_events and events_user_registered"
+    return render_template("user_dashboard.html",events=all_events,my_regs=events_user_registered)
 
 @u_view.route('/book/<int:event_id>')
 def book_event(event_id):

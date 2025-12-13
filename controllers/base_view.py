@@ -15,16 +15,16 @@ def home():
         user=cur.fetchone()
         conn.close()
         if user and password==user['password']:
-            if user['role']!="organizer":
+            if user['role']!="organiser":
                 session['id'] = user['id']
                 session['email'] = user['email']
                 session['role'] = 'user'
-                return "USER DASHBOARD" # to be added
+                return redirect(url_for("user.user_dashboard")) # to be added
             else:
                 session['id'] = user['id']
                 session['email'] = user['email']
-                session['role'] = "organizer"
-                return "ADMIN DASHBOARD" # to be added
+                session['role'] = "organiser"
+                return redirect(url_for("organiser.organiser_dashboard")) # to be added
         else:
             flash("Incorrect Email or Password","danger")
     return render_template('index.html')

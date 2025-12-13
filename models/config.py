@@ -10,7 +10,7 @@ def initialise():
     admin_name = "Dharshan"
     admin_email = "dharshanspn@gmail.com"
     admin_password = "admin"
-    role = "organizer"
+    role = "organiser"
 
     cur.execute(''' INSERT OR REPLACE INTO USERS(id,name,email,password,role) VALUES(?,?,?,?,?);''',(admin_id,admin_name,admin_email,admin_password,role))
 

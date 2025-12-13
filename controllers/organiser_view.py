@@ -10,16 +10,17 @@ def organiser_dashboard():
     cur = conn.cursor()
 
     cur.execute('''
-                    SELECT e.id, e.title, e.description, COUNT(r.id) as registrations_count
+                    SELECT e.id, e.title, e.description,e.date, COUNT(r.id) as registrations_count
                     FROM EVENTS e
                     LEFT JOIN REGISTRATIONS r ON e.id = r.event_id
-                    WHERE e.organizer_id = ?
-                    GROUP BY e.id VALUES (?,?,?,?)
+                    WHERE e.created_by = ?
+                    GROUP BY e.id
                 ''',(session['id'],))
-    conn.execute()
+    events_created_by_organiser=cur.fetchall()
+
     conn.close()
 
-    return "Dashboard template with events list"
+    return render_template("organisers_dashboard.html",events=events_created_by_organiser)
 
 @o_view.route('/create_event', methods=['POST'])
 def create_event():
@@ -32,7 +33,7 @@ def create_event():
         conn=connect_database()
         cur=conn.cursor()
         cur.execute('''
-                    INSERT INTO EVENTS (title, description, date, organizer_id) VALUES (?,?,?,?)''',
+                    INSERT INTO EVENTS (title, description, date, created_by) VALUES (?,?,?,?)''',
                     (title, description, date, organiser))
         conn.commit()
         conn.close()
