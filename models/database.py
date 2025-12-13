@@ -9,7 +9,7 @@ def create_database():
     cur.execute('''
                 CREATE TABLE IF NOT EXISTS USERS(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT,
+                name TEXT NOT NULL,
                 email TEXT NOT NULL UNIQUE,
                 password TEXT NOT NULL,
                 is_admin BOOLEAN DEFAULT FALSE
@@ -21,7 +21,7 @@ def create_database():
                 title TEXT NOT NULL,
                 description TEXT NOT NULL,
                 date DATETIME,
-                created_by INTEGER
+                created_by INTEGER,
                 FOREIGN KEY(created_by) REFERENCES USERS(id)
                 );
                 ''')
@@ -29,11 +29,11 @@ def create_database():
                 CREATE TABLE IF NOT EXISTS REGISTRATIONS(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER NOT NULL,
-                event_id NTEGER NOT NULL,
-                FOREIGN KEY(user_id) REFERENCES USERS(id)
+                event_id INTEGER NOT NULL,
+                FOREIGN KEY(user_id) REFERENCES USERS(id),
                 FOREIGN KEY(event_id) REFERENCES EVENTS(id)
                 );
                 ''')
-    cur.commit()
-    cur.close()
+    conn.commit()
+    conn.close()
     
