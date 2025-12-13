@@ -39,3 +39,11 @@ def create_event():
 
         flash("Event created successfully","success")
         return redirect(url_for("organiser.organiser_dashboard"))
+    
+'''
+keys to be added in frotend
+    title
+    description
+    date
+    
+'''

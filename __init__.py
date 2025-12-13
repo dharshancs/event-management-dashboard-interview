@@ -1,6 +1,6 @@
 from flask import Flask
 
-from controllers.base_view import u_view
+from controllers.base_view import b_view
 from models.config import initialise
 
 def create_app():
@@ -8,6 +8,6 @@ def create_app():
     app.secret_key = "dharshan"
 
     initialise()
-    app.register_blueprint(u_view)
+    app.register_blueprint(b_view)
 
     return app

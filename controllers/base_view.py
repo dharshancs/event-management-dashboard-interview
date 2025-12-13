@@ -1,10 +1,10 @@
 from flask import Blueprint,render_template,request,session,redirect,url_for,flash
 from .__init__ import connect_database
 
-u_view = Blueprint('base',__name__)
+b_view = Blueprint('base',__name__)
 
 
-@u_view.route('/', methods=['GET', 'POST'])
+@b_view.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
         email = request.form['user_email']
@@ -29,8 +29,14 @@ def home():
             flash("Incorrect Email or Password","danger")
     return render_template('index.html')
 
+'''
+keys to be added in frotend
+    user_email
+    user_password
 
-@u_view.route('/register', methods=['GET', 'POST'])
+'''
+
+@b_view.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         name = request.form['user_name']
@@ -61,3 +67,12 @@ def register():
         flash("Account Registered Succesfully","success")
         return redirect(url_for('base.home'))
     return render_template('register.html')
+'''
+keys to be added in frotend
+    user_email
+    user_name
+    user_password
+    user_confirm_password
+    role
+    
+'''
