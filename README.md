@@ -60,4 +60,4 @@ Event_Management/
 
 ### 📝 Note on Development
 
-**Frontend Assets:** To prioritize functionality and ensure robust backend logic within the time constraints, the frontend templates (HTML/CSS structure) were adapted from my previous academic project: [Vehicle Parking App](https://github.com/23f3004028/23f3004028-parking_app).
+**Frontend Assets:** To prioritize functionality and ensure robust backend logic within the time constraints, the frontend templates (HTML/CSS structure) were adapted from my previous academic project: [Vehicle Parking App](https://github.com/23f3004028/23f3004028).
