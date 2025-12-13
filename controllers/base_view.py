@@ -10,9 +10,9 @@ def home():
         email = request.form['user_email']
         password = request.form['user_password']
         conn = connect_database()
-        curr = conn.cursor()
-        curr.execute('SELECT * FROM USERS WHERE email=?',(email,))
-        user=curr.fetchone()
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM USERS WHERE email=?',(email,))
+        user=cur.fetchone()
         conn.close()
         if user and password==user['password']:
             if user['role']!="organizer":
@@ -40,22 +40,22 @@ def register():
         role = request.form['role']
         
         conn = connect_database()
-        curr = conn.cursor()
+        cur = conn.cursor()
 
         if not(password == confirm_password):
             flash("Password do not match","danger")
             conn.close()
             return redirect(url_for('base.register'))
         
-        curr.execute('SELECT id from users WHERE email = ?',(email,))
-        existing_user = curr.fetchone()
+        cur.execute('SELECT id from users WHERE email = ?',(email,))
+        existing_user = cur.fetchone()
 
         if existing_user:
             flash("Email already registered!. Login or use a different email", "danger")
             conn.close()
             return redirect(url_for('base.home'))
         
-        curr.execute('INSERT INTO USERS (name,email,password,role) VALUES (?,?,?,?)',(name,email,password,role))
+        cur.execute('INSERT INTO USERS (name,email,password,role) VALUES (?,?,?,?)',(name,email,password,role))
         conn.commit()
         conn.close()
         flash("Account Registered Succesfully","success")
