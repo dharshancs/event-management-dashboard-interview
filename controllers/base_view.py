@@ -15,15 +15,15 @@ def home():
         user=curr.fetchone()
         conn.close()
         if user and password==user['password']:
-            if not user['is_admin']:
+            if user['role']!="organizer":
                 session['id'] = user['id']
                 session['email'] = user['email']
-                session['is_admin'] = False
+                session['role'] = 'user'
                 return "USER DASHBOARD" # to be added
-            elif user['is_admin']:
+            else:
                 session['id'] = user['id']
                 session['email'] = user['email']
-                session['is_admin'] = True
+                session['role'] = "organizer"
                 return "ADMIN DASHBOARD" # to be added
         else:
             flash("Incorrect Email or Password","danger")
@@ -37,6 +37,7 @@ def register():
         email = request.form['user_email']
         password = request.form['user_password']
         confirm_password = request.form['user_confirm_password']
+        role = request.form['role']
         
         conn = connect_database()
         curr = conn.cursor()
@@ -54,7 +55,7 @@ def register():
             conn.close()
             return redirect(url_for('base.home'))
         
-        curr.execute('INSERT INTO USERS (name,email,password) VALUES (?,?,?)',(name,email,password))
+        curr.execute('INSERT INTO USERS (name,email,password,role) VALUES (?,?,?,?)',(name,email,password,role))
         conn.commit()
         conn.close()
         flash("Account Registered Succesfully","success")

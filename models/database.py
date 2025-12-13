@@ -12,7 +12,7 @@ def create_database():
                 name TEXT NOT NULL,
                 email TEXT NOT NULL UNIQUE,
                 password TEXT NOT NULL,
-                is_admin BOOLEAN DEFAULT FALSE
+                role TEXT NOT NULL DEFAULT 'user'
                 );
                 ''')
     cur.execute('''

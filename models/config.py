@@ -10,9 +10,9 @@ def initialise():
     admin_name = "Dharshan"
     admin_email = "dharshanspn@gmail.com"
     admin_password = "admin"
-    is_admin = True
+    role = "organizer"
 
-    cur.execute(''' INSERT OR REPLACE INTO USERS(id,name,email,password,is_admin) VALUES(?,?,?,?,?);''',(admin_id,admin_name,admin_email,admin_password,is_admin))
+    cur.execute(''' INSERT OR REPLACE INTO USERS(id,name,email,password,role) VALUES(?,?,?,?,?);''',(admin_id,admin_name,admin_email,admin_password,role))
 
     conn.commit()
     conn.close()    
